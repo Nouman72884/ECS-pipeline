@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "5000:5000"
+
+  nginx:
+    image: public.ecr.aws/z0n1n6d1/nginx
+    container_name: nginx
+    depends_on:
+      - app
+    links:
+      - app
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
+
