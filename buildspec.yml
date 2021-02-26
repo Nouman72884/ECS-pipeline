@@ -19,7 +19,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
+      - docker push public.ecr.aws/z0n1n6d1/app:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
 artifacts:
   files:
