@@ -6,11 +6,9 @@ node {
      commit_id = readFile('.git/commit-id').trim()
    }
    
-    stage('Cloning Git') {
-      steps {
+   stage('Cloning Git') {
         git  'https://github.com/Umair841/ECS-pipeline.git'
       }
-    }
 
    stage('docker build/push') {
      docker.withRegistry('https://index.docker.io/v1/', 'Docker') {
