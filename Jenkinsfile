@@ -1,4 +1,9 @@
 node {
+ 
+   triggers {
+  pollSCM 'H/2 * * * *'
+   }
+   
    def commit_id
    stage('Preparation') {
      checkout scm
