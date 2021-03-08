@@ -5,6 +5,12 @@ node {
      sh "git rev-parse --short HEAD > .git/commit-id"                        
      commit_id = readFile('.git/commit-id').trim()
    }
+   
+    stage('Cloning Git') {
+      steps {
+        git  'https://github.com/Umair841/ECS-pipeline.git'
+      }
+    }
 
    stage('docker build/push') {
      docker.withRegistry('https://index.docker.io/v1/', 'Docker') {
