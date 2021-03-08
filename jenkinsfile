@@ -1,7 +1,14 @@
 pipeline {
 
   agent any
+  def commit_id
   stages {
+  
+  stage('Preparation') {
+     checkout scm
+     sh "git rev-parse --short HEAD > .git/commit-id"                        
+     commit_id = readFile('.git/commit-id').trim()
+   }
     stage('Cloning Git') {
       steps {
         git  'https://github.com/Umair841/ECS-pipeline.git'
