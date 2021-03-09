@@ -24,16 +24,17 @@ pipeline{
         }
       }
     }
-    stage('image push')
-    steps{
-        script
-        {
+    stage('image push'){
+        steps{
+            script
+            {   
                 docker.withRegistry(ECRURL, ECRCRED)
                 {
                     docker.image(IMAGE).push()
                 }
-        }
+            }
 
+        }
     }
-}
+ }
 }
