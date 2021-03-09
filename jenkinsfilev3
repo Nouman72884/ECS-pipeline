@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment
     {
-        VERSION = "$(BUILD_NUMBER)"
+        VERSION = "${BUILD_NUMBER}"
         PROJECT = "app"
         IMAGE = "$PROJECT:$VERSION"
         ECRURL = "020046395185.dkr.ecr.eu-central-1.amazonaws.com/app"
