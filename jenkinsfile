@@ -1,8 +1,10 @@
 pipeline {
     agent any
-    environment {
-        registry = "020046395185.dkr.ecr.eu-central-1.amazonaws.com/app"
-    }
+  environment {
+    registry = "020046395185.dkr.ecr.eu-central-1.amazonaws.com/app"
+    registryCredential = 'aws'
+    dockerImage = ''
+  }
    
     stages {
         stage('Cloning Git') {
@@ -20,16 +22,11 @@ pipeline {
       }
     }
    
-    // Uploading Docker images into AWS ECR
-
- 
-    stage('Pushing to ECR') {
-     steps{  
+    stage('ECR Push') {
+      steps{
          script {
-                sh 'aws ecr get-login-password --region eu-central-1 | docker login --username aws --password-stdin 020046395185.dkr.ecr.eu-central-1.amazonaws.com/app'
-                sh 'docker push 020046395185.dkr.ecr.eu-central-1.amazonaws.com/app:latest'
-         }
-        }
+            docker.withRegistry("https://" + registry,"ecr:eu-central-1:" + registryCredential ) {
+            dockerImage.push()
       }    
     }
 }
