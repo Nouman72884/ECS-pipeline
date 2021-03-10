@@ -1,19 +1,23 @@
-
 {
-    "family": "hello-world",
+"taskDefinition": {
+    "volumes": [],
+    "taskDefinitionArn": "arn:aws:ecs:eu-central-1:020046395185:task-definition/UmairTD:1",
     "containerDefinitions": [
         {
-            "image": "",
-            "name": "hello-world",
-            "cpu": 10,
-            "memory": 256,
-            "essential": true,
+            "name": "app",
+            "image": "umair841/demo",
+            "cpu": 120,
             "portMappings": [
                 {
-                    "containerPort": 80,
-                    "hostPort": 80
+                    "containerPort": 5000,
+                    "hostPort": 5000
                 }
-            ]
+            ],
+            "memory": 256,
+            "essential": true
         }
-    ]
+    ],
+    "family": "UmairTD",
+    "revision": 1
+}
 }
