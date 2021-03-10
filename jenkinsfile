@@ -27,8 +27,9 @@ pipeline {
          script {
             docker.withRegistry("https://" + registry,"ecr:eu-central-1:" + registryCredential ) {
             dockerImage.push()
-      }    
+        }    
+      }
     }
+   }
   }
- }
 }
