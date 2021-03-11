@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+    triggers {
+        pollSCM('')
+    }
+    parameters {
+                string(
+                    name: 'ECRRepo',
+                    defaultValue: '020046395185.dkr.ecr.eu-central-1.amazonaws.com/app',
+                    description: 'please provide ECR repo name'
+                )
+                string(
+                    name: 'GithubUrl',
+                    defaultValue: 'https://github.com/Umair841/ECS-pipeline.git',
+                    description: 'please provide url of github'
+                )
+                string(
+                    name: 'region',
+                    defaultValue: 'eu-central-1',
+                    description: 'please provide region name'
+                )
+                string(
+                    name: 'service',
+                    defaultValue: 'UmairECSService',
+                    description: 'inter service name'
+                )
+                string(
+                    name: 'cluster',
+                    defaultValue: 'UmairECSCluster',
+                    description: 'inter cluster name'
+                )
+                string(
+                    name: 'image',
+                    defaultValue: '020046395185.dkr.ecr.eu-central-1.amazonaws.com/app:latest',
+                    description: 'inter repo for image'
+                )
+    }
+  environment {
+    registry = "020046395185.dkr.ecr.eu-central-1.amazonaws.com/app"
+    registryCredential = 'aws1'
+    dockerImage = ''
+  }
+   
+    stages {
+        stage('Cloning Git') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: "${params.GithubUrl}"]]])     
+            }
+        }
+  
+    // Building Docker images
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build registry
+        }
+      }
+    }
+   
+    stage('ECR Push') {
+      steps{
+         script {
+            docker.withRegistry("https://" + "${params.ECRRepo}","ecr:${params.region}:" + registryCredential ) {
+            dockerImage.push()
+        }    
+      }
+    }
+   }
+  
+stage('ECS-Deploy') {
+            
+            steps {
+                script {
+                    
+                    sh " ecs-deploy -n ${params.service} -c ${params.cluster} -i ${params.image} "
+                    timeout(time: 10, unit: "MINUTES")
+                    
+                    
+                }
+
+            }
+        }
+    }
+   
+  }
