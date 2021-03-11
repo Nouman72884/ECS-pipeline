@@ -1,13 +1,30 @@
 pipeline {
     agent any
-
+    parameters {
+                string(
+                    name: 'service',
+                    defaultValue: 'UmairService',
+                    description: 'inter service name'
+                )
+                string(
+                    name: 'cluster',
+                    defaultValue: 'Demo-cluster',
+                    description: 'inter cluster name'
+                )
+                string(
+                    name: 'image',
+                    defaultValue: '020046395185.dkr.ecr.eu-central-1.amazonaws.com/app:latest',
+                    description: 'inter repo for image'
+                )
+            }
+    
     stages {
         stage('ECS-Deploy') {
             
             steps {
                 script {
                     
-                    sh 'ecs-deploy -n UmairService -c Demo-cluster -i 020046395185.dkr.ecr.eu-central-1.amazonaws.com/app:latest'
+                    sh " ecs-deploy -n ${params.service} -c ${params.cluster} -i ${params.image} "
                     
                     
                 }
