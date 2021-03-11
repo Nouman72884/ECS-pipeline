@@ -69,19 +69,18 @@ pipeline {
   
 stage('ECS-Deploy') {
             options {
-              timeout(time: 1, unit: 'HOURS') 
-          }
-            
+              timeout(time: 1, unit: 'HOURS')
+            }
             steps {
                 script {
                     
                     sh " ecs-deploy -n ${params.service} -c ${params.cluster} -i ${params.image} "
                    
                     
-                    
+                    }
                 }
 
-            }
+           
         }
     }
    
