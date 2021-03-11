@@ -1,8 +1,6 @@
 pipeline {
     agent any
-    triggers {
-        pollSCM('')
-    }
+
     parameters {
                 string(
                     name: 'ECRRepo',
@@ -75,12 +73,9 @@ stage('ECS-Deploy') {
                 script {
                     
                     sh " ecs-deploy -n ${params.service} -c ${params.cluster} -i ${params.image} "
-                   
-                    
-                    }
-                }
+                      }
 
-           
+            }
         }
     }
    
