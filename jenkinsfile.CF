@@ -69,11 +69,6 @@ pipeline {
                     description: 'please inter Memory value (in GBs for example 0.5GB) for containers ..!!'
                 )
                 string(
-                    name: 'RoleName',
-                    defaultValue: 'ExecutionRole',
-                    description: 'please inter name for Role attached to Service having full access to (ECR , Loadbalancer and Auto Scaling)'
-                )
-                string(
                     name: 'imageForApp',
                     defaultValue: '020046395185.dkr.ecr.eu-central-1.amazonaws.com/app',
                     description: 'please inter name of image or valid url of image for python-container application..!!'
@@ -94,7 +89,6 @@ pipeline {
     stages {
         stage('Submit Stack') {
             steps {
-            echo " ${params.RoleName}"
             sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters https://vpcstack841.s3.eu-central-1.amazonaws.com/params.json --capabilities CAPABILITY_NAMED_IAM "
               }
              }
