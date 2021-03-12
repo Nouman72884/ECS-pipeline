@@ -94,6 +94,7 @@ pipeline {
     stages {
         stage('Submit Stack') {
             steps {
+            echo " ${params.RoleName}"
             sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters https://vpcstack841.s3.eu-central-1.amazonaws.com/params.json --capabilities CAPABILITY_NAMED_IAM "
               }
              }
