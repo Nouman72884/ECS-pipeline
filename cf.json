@@ -43,7 +43,7 @@ Parameters:
 
   Containerport:
     Description: Please inter the port on which python app will server ..!!
-    Type: Number
+    Type: String
     Default: 5000
 
   ContainerName2:
@@ -53,12 +53,12 @@ Parameters:
 
   Container2port:
     Description: Please inter the port on app will lissen  ..!!
-    Type: Number
+    Type: String
     Default: 80
 
   ContainerCPU:
     Description: please inter CPU value for containers ..!!
-    Type: Number
+    Type: String
     Default: 256
 
   ContainerMemory:
