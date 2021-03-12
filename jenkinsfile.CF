@@ -1,10 +1,101 @@
 
 pipeline {
     agent any
+    
+    parameters {
+                string(
+                    name: 'DemoVpcCIDR',
+                    defaultValue: '10.0.0.0/16',
+                    description: 'What Should Be The CIDR Block For VPC ?'
+                )
+                string(
+                    name: '1stPublicSAZ',
+                    defaultValue: 'eu-central-1a',
+                    description: 'please provide Availability Zone for 1st Public Subnet'
+                )
+                string(
+                    name: '2ndPublicSAZ',
+                    defaultValue: 'eu-central-1b',
+                    description: 'please provide Availability Zone for 1st Public Subnet'
+                )
+                string(
+                    name: 'PublicS1CIDR',
+                    defaultValue: '10.0.0.0/19',
+                    description: 'What Should be the CIDR Block of 1st Public Subnet ?'
+                )
+                string(
+                    name: 'PublicS2CIDR',
+                    defaultValue: '10.0.32.0/19',
+                    description: 'What Should be the CIDR Block of 2nd Public Subnet ?'
+                )
+                string(
+                    name: 'ClusterName',
+                    defaultValue: 'UmairECSService01',
+                    description: 'please inter name for yous ECS Service'
+                )
+                string(
+                    name: 'SErviceName',
+                    defaultValue: 'UmairECSCluster01',
+                    description: 'please inter name for yous ECS Service'
+                )
+                string(
+                    name: 'ContainerName1',
+                    defaultValue: 'app',
+                    description: 'please inter name for your containers ..!!'
+                )
+                string(
+                    name: 'Containerport',
+                    defaultValue: '5000',
+                    description: 'Please inter the port on which python app will server ..!!'
+                )
+                string(
+                    name: 'ContainerName2',
+                    defaultValue: 'nginx',
+                    description: 'Please inter name of nginx Container "which is used is a proxy container" ..!!'
+                )
+                string(
+                    name: 'Container2port',
+                    defaultValue: '80',
+                    description: 'Please inter the port on which Nginx proxy will serve  ..!!'
+                )
+                string(
+                    name: 'ContainerCPU',
+                    defaultValue: '256',
+                    description: 'please inter CPU value for containers ..!!'
+                )
+                string(
+                    name: 'ContainerMemory',
+                    defaultValue: '0.5GB',
+                    description: 'please inter Memory value (in GBs for example 0.5GB) for containers ..!!'
+                )
+                string(
+                    name: 'RoleName',
+                    defaultValue: 'ExecutionRole',
+                    description: 'please inter name for Role attached to Service having full access to (ECR , Loadbalancer and Auto Scaling)'
+                )
+                string(
+                    name: 'imageForApp',
+                    defaultValue: '020046395185.dkr.ecr.eu-central-1.amazonaws.com/app',
+                    description: 'please inter name of image or valid url of image for python-container application..!!'
+                )
+                string(
+                    name: 'imageForNginx',
+                    defaultValue: 'public.ecr.aws/z0n1n6d1/nginx',
+                    description: 'please inter name of image or valid url of image for nginx-container "used as proxy"..!!'
+                )
+                string(
+                    name: 'DesiredNumber',
+                    defaultValue: '1',
+                    description: 'please inter the Desired Count for containers ..!!'
+                )
+                
+                }
+    
     stages {
         stage('Submit Stack') {
             steps {
-            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1' --capabilities CAPABILITY_NAMED_IAM "
+            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1' --capabilities CAPABILITY_NAMED_IAM 
+            --parameters  ParameterKey=ClusterName , ParameterValue=${params.ClusterName}"
               }
              }
             }
