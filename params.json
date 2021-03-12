@@ -52,10 +52,6 @@
     "ParameterValue": "${params.ContainerMemory}"
   }
   {
-    "ParameterKey": "RoleName",
-    "ParameterValue": "${params.RoleName}"
-  }
-  {
     "ParameterKey": "imageForApp",
     "ParameterValue": "${params.imageForApp}"
   }
