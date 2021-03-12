@@ -90,7 +90,7 @@ pipeline {
         stage('Submit Stack') {
             steps {
             echo "${params.ClusterName}"
-            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --capabilities CAPABILITY_NAMED_IAM "
+            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1' --parameters https://vpcstack841.s3.eu-central-1.amazonaws.com/example.json --capabilities CAPABILITY_NAMED_IAM "
               }
              }
             }
