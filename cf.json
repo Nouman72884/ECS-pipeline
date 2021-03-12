@@ -7,11 +7,13 @@ Parameters:
 
   1stPublicSAZ:
     Description: Select Availability Zone For Your 1st Public Subnet .
-    Type: AWS::EC2::AvailabilityZone::Name
+    Type: String
+    Default: eu-central-1a
 
   2ndPublicSAZ:
     Description: Select Availability Zone For Your 2nd Public Subnet .
-    Type: AWS::EC2::AvailabilityZone::Name
+    Type: String
+    Default: eu-central-1b
 
   PublicS1CIDR:
     Description: What Should be the CIDR Block of 1st Public Subnet ?
