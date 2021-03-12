@@ -43,7 +43,7 @@ pipeline {
                     defaultValue: 'app',
                     description: 'please inter name for your containers ..!!'
                 )
-                string(
+                number(
                     name: 'Containerport',
                     defaultValue: '5000',
                     description: 'Please inter the port on which python app will server ..!!'
@@ -53,7 +53,7 @@ pipeline {
                     defaultValue: 'nginx',
                     description: 'Please inter name of nginx Container "which is used is a proxy container" ..!!'
                 )
-                string(
+                number(
                     name: 'Container2port',
                     defaultValue: '80',
                     description: 'Please inter the port on which Nginx proxy will serve  ..!!'
