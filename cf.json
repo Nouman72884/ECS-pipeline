@@ -28,12 +28,12 @@ Parameters:
   ClusterName:
     Description: please inter name for yous ECS Service
     Type: String
-    Default: UmairECSCluster
+    Default: UmairECSCluster01
 
   SErviceName:
     Description: please inter name for yous ECS Service
     Type: String
-    Default: UmairECSService
+    Default: UmairECSService01
 
 
   ContainerName1:
