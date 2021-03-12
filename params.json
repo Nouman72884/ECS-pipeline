@@ -53,7 +53,7 @@
   }
   {
     "ParameterKey": "RoleName",
-    "ParameterValue": ${params.RoleName}
+    "ParameterValue": "${params.RoleName}"
   }
   {
     "ParameterKey": "imageForApp",
