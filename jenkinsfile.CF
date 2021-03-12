@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Submit Stack') {
             steps {
-            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1' --capabilities CAPABILITY_NAMED_IAM "
+            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1' --capabilities CAPABILITY_NAMED_IAM --parameters  ParameterKey=ClusterName,ParameterValue=UmairECSCluster"
               }
              }
             }
