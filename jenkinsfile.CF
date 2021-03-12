@@ -30,12 +30,12 @@ pipeline {
                 )
                 string(
                     name: 'ClusterName',
-                    defaultValue: 'UmairECSService01',
+                    defaultValue: 'UmairECSCluster01',
                     description: 'please inter name for yous ECS Service'
                 )
                 string(
                     name: 'SErviceName',
-                    defaultValue: 'UmairECSCluster01',
+                    defaultValue: 'UmairECSService01',
                     description: 'please inter name for yous ECS Service'
                 )
                 string(
@@ -94,7 +94,7 @@ pipeline {
     stages {
         stage('Submit Stack') {
             steps {
-            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters  ParameterKey=ClusterName,ParameterValue=${params.ClusterName} --capabilities CAPABILITY_NAMED_IAM "
+            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters https://github.com/Umair841/ECS-pipeline.git/params.json --capabilities CAPABILITY_NAMED_IAM "
               }
              }
             }
