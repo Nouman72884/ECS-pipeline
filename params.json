@@ -1,0 +1,70 @@
+[
+  {
+    "ParameterKey": "DemoVpcCIDR",
+    "ParameterValue": "${params.DemoVpcCIDR}"
+  }, 
+  {
+    "ParameterKey": "1stPublicSAZ",
+    "ParameterValue": "${params.1stPublicSAZ}"
+  }
+   {
+    "ParameterKey": "2ndPublicSAZ",
+    "ParameterValue": "${params.2ndPublicSAZ}"
+  }
+   {
+    "ParameterKey": "PublicS1CIDR",
+    "ParameterValue": "${params.PublicS1CIDR}"
+  }
+   {
+    "ParameterKey": "PublicS2CIDR",
+    "ParameterValue": "${params.PublicS2CIDR}"
+  }
+   {
+    "ParameterKey": "ClusterName",
+    "ParameterValue": "${params.ClusterName}"
+  }
+   {
+    "ParameterKey": "SErviceName",
+    "ParameterValue": "${params.SErviceName}"
+  }
+   {
+    "ParameterKey": "ContainerName1",
+    "ParameterValue": "${params.ContainerName1}"
+  }
+   {
+    "ParameterKey": "Containerport",
+    "ParameterValue": "${params.Containerport}"
+  }
+   {
+    "ParameterKey": "ContainerName2",
+    "ParameterValue": "${params.ContainerName2}"
+  }
+   {
+    "ParameterKey": "Container2port",
+    "ParameterValue": "${params.Container2port}"
+  }
+  {
+    "ParameterKey": "ContainerCPU",
+    "ParameterValue": "${params.ContainerCPU}"
+  }
+  {
+    "ParameterKey": "ContainerMemory",
+    "ParameterValue": "${params.ContainerMemory}"
+  }
+  {
+    "ParameterKey": "RoleName",
+    "ParameterValue": "${params.RoleName}"
+  }
+  {
+    "ParameterKey": "imageForApp",
+    "ParameterValue": "${params.imageForApp}"
+  }
+  {
+    "ParameterKey": "imageForNginx",
+    "ParameterValue": "${params.imageForNginx"
+  }
+  {
+    "ParameterKey": "DesiredNumber",
+    "ParameterValue": "${params.DesiredNumber}"
+  }
+]
