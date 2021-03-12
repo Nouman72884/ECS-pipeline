@@ -1,0 +1,237 @@
+Parameters:
+
+  DemoVpcCIDR:
+    Description: What Should Be The CIDR Block For VPC ?
+    Type: String
+    Default: 10.0.0.0/16
+
+  1stPublicSAZ:
+    Description: Select Availability Zone For Your 1st Public Subnet .
+    Type: AWS::EC2::AvailabilityZone::Name
+
+  2ndPublicSAZ:
+    Description: Select Availability Zone For Your 2nd Public Subnet .
+    Type: AWS::EC2::AvailabilityZone::Name
+
+  PublicS1CIDR:
+    Description: What Should be the CIDR Block of 1st Public Subnet ?
+    Type: String
+    Default: 10.0.0.0/19
+
+  PublicS2CIDR:
+    Description: What Should be the CIDR Block of 2nd Public Subnet ?
+    Type: String
+    Default: 10.0.32.0/19
+
+  ClusterName:
+    Description: please inter name for yous ECS Service
+    Type: String
+    Default: UmairECSCluster
+
+  SErviceName:
+    Description: please inter name for yous ECS Service
+    Type: String
+    Default: UmairECSService
+
+
+  ContainerName1:
+    Description: please inter name for your containers ..!!
+    Type: String
+    Default: app
+
+  Containerport:
+    Description: Please inter the port on which python app will server ..!!
+    Type: Number
+    Default: 5000
+
+  ContainerName2:
+    Description: Please inter name of nginx Container "which is used is a proxy container" ..!!
+    Type: String
+    Default: nginx
+
+  Container2port:
+    Description: Please inter the port on app will lissen  ..!!
+    Type: Number
+    Default: 80
+
+  ContainerCPU:
+    Description: please inter CPU value for containers ..!!
+    Type: Number
+    Default: 256
+
+  ContainerMemory:
+    Description: please inter Memory value (in GBs for example 0.5GB) for containers ..!!
+    Type: String
+    Default: 0.5GB
+
+  RoleName:
+    Description: please inter name for Role attached to Service having full access to (ECR , Loadbalancer and Auto Scaling)
+    Type: String
+    Default: ExecutionRole
+
+  imageForApp:
+    Description: please inter name of image or valid url of image for python-container application..!!
+    Type: String
+    Default: 020046395185.dkr.ecr.eu-central-1.amazonaws.com/app
+
+  imageForNginx:
+    Description: please inter name of image or valid url of image for nginx-container "used as proxy"..!!
+    Type: String
+    Default: public.ecr.aws/z0n1n6d1/nginx
+
+  DesiredNumber:
+    Description: please inter the Desired Count for containers ..!!
+    Type: Number
+    Default: 1
+
+
+Resources:
+
+  UmairECSCluster:
+    Type: 'AWS::ECS::Cluster'
+    Properties:
+      ClusterName: !Ref ClusterName
+      CapacityProviders:
+        - FARGATE
+      Tags:
+        - Key: Name
+          Value: Umair-task-ECS-Cluster
+
+  UmairTaskDef:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Cpu: !Ref ContainerCPU
+      Memory: !Ref ContainerMemory
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn: !Ref ExecutionRole
+      TaskRoleArn: !Ref ExecutionRole
+      Tags:
+        - Key: Name
+          Value: Umair-Task-Defination
+      ContainerDefinitions:
+        - Name: !Ref ContainerName1
+          image: !Ref imageForApp
+          PortMappings:
+            - ContainerPort: !Ref Containerport
+        - Name: !Ref ContainerName2
+          image: !Ref imageForNginx
+          PortMappings:
+            - ContainerPort: !Ref Container2port
+          LogConfiguration:
+            LogDriver: awslogs
+            options:
+              awslogs-group: !Ref LogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: "Tasklogs"
+
+
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+        - arn:aws:iam::aws:policy/AutoScalingConsoleFullAccess
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+
+  UmairECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Ref SErviceName
+      Cluster: !Ref ClusterName
+      LaunchType: FARGATE
+      PlatformVersion: LATEST
+      TaskDefinition: !Ref UmairTaskDef
+      HealthCheckGracePeriodSeconds: 60
+      EnableECSManagedTags: true
+      Tags:
+        - Key: Name
+          Value: Umair-ECSTask-Service
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredNumber
+      LoadBalancers:
+        - ContainerName: !Ref ContainerName2
+          ContainerPort: !Ref Container2port
+          TargetGroupArn: !GetAtt LBNested.Outputs.TargitGroupID
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - !GetAtt VPCNested.Outputs.PuclicSN1ID
+            - !GetAtt VPCNested.Outputs.PuclicSN2ID
+          SecurityGroups:
+            - !Ref UmairSGGroup
+
+  VPCNested:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+        TemplateURL: https://vpcstack841.s3.eu-central-1.amazonaws.com/VPC.yaml
+        Parameters:
+            DemoVpcCIDR: !Ref DemoVpcCIDR
+            1stPublicSAZ: !Ref 1stPublicSAZ
+            2ndPublicSAZ: !Ref 2ndPublicSAZ
+            PublicS1CIDR: !Ref PublicS1CIDR
+            PublicS2CIDR: !Ref PublicS2CIDR
+        TimeoutInMinutes: 10
+
+  LBNested:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+        TemplateURL: https://vpcstack841.s3.eu-central-1.amazonaws.com/LB.yaml
+        Parameters:
+            VPCID: !GetAtt VPCNested.Outputs.VpcId
+            Subnet01: !GetAtt VPCNested.Outputs.PuclicSN1ID
+            Subnet02: !GetAtt VPCNested.Outputs.PuclicSN2ID
+        TimeoutInMinutes: 10
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: Tasklogs
+      RetentionInDays: 1
+
+  UmairSGGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !GetAtt VPCNested.Outputs.VpcId
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        SourceSecurityGroupId: !GetAtt LBNested.Outputs.LBSecurityGroupID
+      - IpProtocol: tcp
+        FromPort: 5000
+        ToPort: 5000
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: "-1"
+        CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: SecurityGroup-for-containers
+
+
+Outputs:
+  LoadBalancerDNS:
+    Description: DNS of load balancer from which we can access Nginx proxy ..!!
+    Value: !GetAtt LBNested.Outputs.LoadBalancerDNS
+
+  Clustername:
+    Description: this is the Cluster name for this ECS task ..!!
+    Value: !Ref ClusterName
+
+  Servicename:
+    Description: this is the Service name for this ECS Cluster ..!!
+    Value: !Ref ClusterName
