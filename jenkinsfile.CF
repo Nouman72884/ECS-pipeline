@@ -89,7 +89,7 @@ pipeline {
     stages {
         stage('Submit Stack') {
             steps {
-            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters https://vpcstack841.s3.eu-central-1.amazonaws.com/params.json --capabilities CAPABILITY_NAMED_IAM "
+            sh "aws cloudformation create-stack --stack-name UmairStack --template-body file://cf.json --region 'eu-central-1'  --parameters https://github.com/Umair841/ECS-pipeline/blob/master/params.json --capabilities CAPABILITY_NAMED_IAM "
               }
              }
             }
