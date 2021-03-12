@@ -58,7 +58,7 @@ pipeline {
                     defaultValue: '80',
                     description: 'Please inter the port on which Nginx proxy will serve  ..!!'
                 )
-                string(
+                number(
                     name: 'ContainerCPU',
                     defaultValue: '256',
                     description: 'please inter CPU value for containers ..!!'
