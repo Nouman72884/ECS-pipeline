@@ -83,7 +83,7 @@ Parameters:
 
   DesiredNumber:
     Description: please inter the Desired Count for containers ..!!
-    Type: Number
+    Type: String
     Default: 1
 
 
