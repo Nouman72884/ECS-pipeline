@@ -7,7 +7,7 @@ pipeline {
                     name: 'DemoVpcCIDR',
                     defaultValue: '10.0.0.0/16',
                     description: 'What Should Be The CIDR Block For VPC ?'
-                ),
+                )
                 string(
                     name: '1stPublicSAZ',
                     defaultValue: 'eu-central-1a',
